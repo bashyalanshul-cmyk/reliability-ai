@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reliability AI - Autonomous Model Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">🛡️ Reliability AI</h1>
+            <p class="text-xl opacity-90 mb-6">4-Step Autonomous Model Evaluation & Drift Shield</p>
+            <div class="flex flex-wrap gap-4">
+                <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm"><strong>Step 1:</strong> Baseline Pulse</div>
+                <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm"><strong>Step 2:</strong> Production Drift Injection</div>
+                <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm"><strong>Step 3:</strong> Traffic Light Evaluator</div>
+                <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm"><strong>Step 4:</strong> GenAI Incident Responder</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-10">
+
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🎬 Simulation Controls</h2>
+                <button id="run-full-sim" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl text-lg transition-all shadow-lg">
+                    🚀 Run Full 30-Day Simulation
+                </button>
+                <p class="text-sm text-gray-600 mt-4">This will simulate 30 days, with <strong>30% drop in MonthlyCharges on Day 30</strong>!</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">⚡ Quick Test</h2>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Drift Level</label>
+                    <input type="range" id="drift-level" min="0" max="100" value="0" 
+                           oninput="document.getElementById('drift-level-value').textContent = this.value + '%'"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    <p class="text-sm text-gray-500 mt-2">Current: <span id="drift-level-value">0%</span></p>
+                </div>
+                <button id="simulate-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-all">
+                    Simulate Single Day
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">📅 Day-by-Day Timeline</h2>
+            <div id="timeline" class="flex flex-wrap gap-2 justify-center"></div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Model Health</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-5 rounded-xl text-center">
+                    <div class="text-3xl font-bold text-green-700" id="auc-display">--</div>
+                    <div class="text-green-800 font-medium">ROC-AUC</div>
+                </div>
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-100 p-5 rounded-xl text-center">
+                    <div class="text-3xl font-bold text-blue-700" id="precision-display">--</div>
+                    <div class="text-blue-800 font-medium">Precision</div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-violet-100 p-5 rounded-xl text-center">
+                    <div class="text-3xl font-bold text-purple-700" id="recall-display">--</div>
+                    <div class="text-purple-800 font-medium">Recall</div>
+                </div>
+                <div class="bg-gradient-to-br from-orange-50 to-amber-100 p-5 rounded-xl text-center">
+                    <div class="text-3xl font-bold text-orange-700" id="traffic-light">🟢</div>
+                    <div class="text-orange-800 font-medium">Status</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🔍 Drift Details</h2>
+                <div id="drift-details" class="bg-gray-50 p-5 rounded-xl text-sm text-gray-700 mb-4">Run a simulation to see drift details</div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">📄 Incident Report</h2>
+                <pre id="report-output" class="bg-gray-50 p-5 rounded-xl text-sm text-gray-700 whitespace-pre-wrap max-h-80 overflow-y-auto">Run a simulation to generate an incident report</pre>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-white py-8 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-400">Built with Data Science & AI for Enterprise MLOps</p>
+        </div>
+    </footer>
+
+    <script>
+        let dayCounter = 0;
+        let history = [];
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        async function init() {
+            await checkModel();
+        }
+
+        async function checkModel() {
+            try {
+                const response = await fetch('/check');
+                const text = await response.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (err) {
+                    console.error('Error parsing JSON:', err);
+                    console.log('Server returned:', text);
+                    return;
+                }
+                
+                document.getElementById('auc-display').textContent = data.roc_auc.toFixed(3);
+                document.getElementById('precision-display').textContent = data.precision.toFixed(3);
+                document.getElementById('recall-display').textContent = data.recall.toFixed(3);
+                document.getElementById('traffic-light').textContent = data.overall_drift ? '🔴' : '🟢';
+                
+                if (data.drift_report) {
+                    updateDriftDetails(data.drift_report);
+                }
+            } catch (e) {
+                console.error('Check error:', e);
+            }
+        }
+
+        async function simulateDay(day = 1, driftLevel = 0.0) {
+            try {
+                const response = await fetch('/simulate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ drift_level: driftLevel, day: day })
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('auc-display').textContent = data.performance.roc_auc.toFixed(3);
+                document.getElementById('precision-display').textContent = data.performance.precision.toFixed(3);
+                document.getElementById('recall-display').textContent = data.performance.recall.toFixed(3);
+                document.getElementById('traffic-light').textContent = data.traffic_light.charAt(0);
+                
+                updateDriftDetails(data.drift);
+                document.getElementById('report-output').textContent = data.report;
+                
+            } catch (e) {
+                console.error('Simulation error:', e);
+            }
+        }
+
+        async function runFullSimulation() {
+            const btn = document.getElementById('run-full-sim');
+            btn.disabled = true;
+            btn.innerHTML = '🔄 Running 30-Day Simulation...';
+            
+            try {
+                const response = await fetch('/run-full-simulation', { method: 'POST' });
+                const data = await response.json();
+                history = data.history;
+                
+                renderTimeline(history);
+                
+                if (data.incident_reports.length > 0) {
+                    document.getElementById('report-output').textContent = data.incident_reports[0].report;
+                }
+                
+                if (data.final_performance) {
+                    document.getElementById('auc-display').textContent = data.final_performance.roc_auc.toFixed(3);
+                    document.getElementById('precision-display').textContent = data.final_performance.precision.toFixed(3);
+                    document.getElementById('recall-display').textContent = data.final_performance.recall.toFixed(3);
+                }
+                
+                if (data.final_drift) {
+                    updateDriftDetails(data.final_drift);
+                    document.getElementById('traffic-light').textContent = '🔴';
+                }
+                
+            } catch (e) {
+                console.error('Full simulation error:', e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🚀 Run Full 30-Day Simulation';
+            }
+        }
+
+        function renderTimeline(history) {
+            const container = document.getElementById('timeline');
+            container.innerHTML = '';
+            history.forEach(dayData => {
+                const dayDiv = document.createElement('div');
+                let bgColor = 'bg-green-100 border-green-300 text-green-800';
+                let light = '🟢';
+                
+                if (dayData.traffic_light.includes('Yellow')) {
+                    bgColor = 'bg-yellow-100 border-yellow-300 text-yellow-800';
+                    light = '🟡';
+                } else if (dayData.traffic_light.includes('Red')) {
+                    bgColor = 'bg-red-100 border-red-300 text-red-800';
+                    light = '🔴';
+                }
+                
+                dayDiv.className = 'px-4 py-3 rounded-lg border-2 font-semibold ' + bgColor;
+                dayDiv.textContent = 'D' + dayData.day + ' ' + light;
+                container.appendChild(dayDiv);
+            });
+        }
+
+        function updateDriftDetails(driftReport) {
+            if (!driftReport || !driftReport.features) {
+                document.getElementById('drift-details').innerHTML = '<p class="text-gray-500">Run a simulation to see drift details</p>';
+                return;
+            }
+            
+            let driftHtml = '<p><strong>Overall drift detected:</strong> ' + (driftReport.overall_drift ? 'YES' : 'NO') + '</p>';
+            driftHtml += '<p><strong>Drifted features:</strong> ' + (driftReport.drifted_features && driftReport.drifted_features.length > 0 ? driftReport.drifted_features.join(', ') : 'None') + '</p>';
+            driftHtml += '<ul class="mt-2">';
+            for (const [feature, metrics] of Object.entries(driftReport.features)) {
+                const ks = metrics.ks_statistic != null ? metrics.ks_statistic.toFixed(3) : 'N/A';
+                const psi = metrics.psi != null ? metrics.psi.toFixed(3) : 'N/A';
+                const status = metrics.drifted ? 'DRIFTED' : 'OK';
+                driftHtml += '<li><strong>' + feature + ':</strong> KS=' + ks + ', PSI=' + psi + ' (' + status + ')</li>';
+            }
+            driftHtml += '</ul>';
+            document.getElementById('drift-details').innerHTML = driftHtml;
+        }
+
+        document.getElementById('simulate-btn').addEventListener('click', async () => {
+            const driftLevel = document.getElementById('drift-level').value / 100;
+            await simulateDay(++dayCounter, driftLevel);
+        });
+        
+        document.getElementById('run-full-sim').addEventListener('click', runFullSimulation);
+    </script>
+</body>
+</html>
