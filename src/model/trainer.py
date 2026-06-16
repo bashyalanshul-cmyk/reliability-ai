@@ -57,9 +57,9 @@ def train_model():
     
     metrics = {
         'roc_auc': roc_auc_score(y_test, y_pred_proba),
-        'precision': precision_score(y_test, y_pred),
-        'recall': recall_score(y_test, y_pred),
-        'f1': f1_score(y_test, y_pred)
+        'precision': precision_score(y_test, y_pred, zero_division=0),
+        'recall': recall_score(y_test, y_pred, zero_division=0),
+        'f1': f1_score(y_test, y_pred, zero_division=0)
     }
     
     # Save model and preprocessor

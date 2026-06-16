@@ -20,9 +20,9 @@ def evaluate_model(model, preprocessor, df):
     metrics = {
         'timestamp': pd.Timestamp.now().isoformat(),
         'roc_auc': float(roc_auc_score(y, y_pred_proba)),
-        'precision': float(precision_score(y, y_pred)),
-        'recall': float(recall_score(y, y_pred)),
-        'f1': float(f1_score(y, y_pred)),
+        'precision': float(precision_score(y, y_pred, zero_division=0)),
+        'recall': float(recall_score(y, y_pred, zero_division=0)),
+        'f1': float(f1_score(y, y_pred, zero_division=0)),
         'sample_size': len(df)
     }
     
